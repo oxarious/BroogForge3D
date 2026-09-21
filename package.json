@@ -1,0 +1,31 @@
+{
+  "name": "broogforge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local multi-engine 3D asset studio",
+  "scripts": {
+    "build:effects": "node scripts/build-effects.mjs",
+    "start": "node server/index.js",
+    "test": "node --test tests/*.test.js",
+    "check": "node --check server/index.js && node --check server/queue.js && node --check public/app.js"
+  },
+  "dependencies": {
+    "@gltf-transform/core": "^4.5.0",
+    "@gltf-transform/extensions": "^4.5.0",
+    "@gltf-transform/functions": "^4.5.0",
+    "animejs": "^4.5.0",
+    "express": "^5.1.0",
+    "lucide": "^0.468.0",
+    "meshoptimizer": "^1.2.0",
+    "motion": "^13.4.0",
+    "multer": "^2.0.2",
+    "sharp": "^0.35.0",
+    "three": "^0.186.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "esbuild": "^0.28.2",
+    "pngjs": "^7.0.0"
+  }
+}

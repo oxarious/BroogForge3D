@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#202522">
+  <title>BroogForge | Studio</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/vendor/model-viewer.min.js"></script>
+  <script defer src="/vendor/lucide.js"></script>
+  <script defer src="/app.js"></script>
+  <script defer src="/textures.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to workspace</a>
+  <aside class="sidebar">
+    <a class="brand" href="#studio" aria-label="BroogForge Studio"><span class="brand-mark"><i data-lucide="anvil"></i></span><span>Broog<span class="brand-light">Forge</span><small>LOCAL 3D WORKSPACE</small></span></a>
+    <div class="nav-label">WORKSPACE</div>
+    <nav aria-label="Workspace">
+      <button class="nav-item" data-view="process"><i data-lucide="workflow"></i>Process</button>
+      <button class="nav-item" data-view="textures"><i data-lucide="paintbrush"></i>Texturing</button>
+      <a class="nav-item" href="/effects/"><i data-lucide="sparkles"></i>Effects Studio</a>
+      <button class="nav-item active" data-view="studio" aria-current="page"><i data-lucide="box"></i>Studio<span class="nav-dot"></span></button>
+      <button class="nav-item" data-view="library"><i data-lucide="layers-3"></i>Library<span id="library-count" class="nav-count">0</span></button>
+      <button class="nav-item" data-view="engines"><i data-lucide="cpu"></i>Engines<span id="engine-count" class="nav-count">0</span></button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="machine"><span class="eyebrow">COMPUTE</span><strong id="gpu-name">Connecting...</strong><span id="gpu-memory">Memory unavailable</span><span id="system-status" class="system-status"><span class="dot"></span>Connecting</span></div>
+      <button id="shutdown" class="shutdown" disabled><i data-lucide="power"></i>Shut down</button>
+    </div>
+  </aside>
+  <div class="app-shell">
+    <header class="topbar"><div class="breadcrumb">Workspace <span>/</span> <strong id="breadcrumb-view">Studio</strong></div><span id="connection" class="connection"><span class="dot"></span>Connecting to local server</span></header>
+    <main id="main" tabindex="-1">
+      <div id="notice" class="notice" role="alert" hidden><span id="notice-text"></span><button id="dismiss-notice" class="icon-button" aria-label="Dismiss message" title="Dismiss message"><i data-lucide="x"></i></button></div>
+      <section id="process-view" class="view" aria-labelledby="process-title" hidden>
+        <div class="page-heading"><div><div class="eyebrow">PRODUCTION MONITOR</div><h1 id="process-title">Process</h1></div><span class="local-label"><i data-lucide="shield-check"></i>Local compute</span></div>
+        <div class="process-stats" id="process-stats"></div>
+        <div class="engine-flow" id="engine-flow"></div>
+        <div class="process-layout">
+          <form id="process-form" class="process-form">
+            <div class="section-heading"><h2>Process an asset</h2><i data-lucide="boxes"></i></div>
+            <div class="form-field"><label for="process-source">Library asset</label><select id="process-source"><option value="">Upload a GLB</option></select></div>
+            <div class="form-field" id="mesh-upload-field"><label for="mesh-input">GLB file</label><input id="mesh-input" type="file" accept=".glb"><span class="field-note">Self-contained GLB / 64 MB maximum</span></div>
+            <div class="form-field"><label for="process-engine">Operation</label><select id="process-engine"></select><p class="field-note" id="process-engine-note"></p></div>
+            <div class="form-field" id="profile-field"><label for="process-profile">Optimization profile</label><select id="process-profile"><option value="balanced">Balanced</option><option value="compact">Compact</option><option value="lossless">Cleanup only</option></select><p class="field-note" id="profile-note">65% triangle target / WebP / textures up to 2048 px</p></div>
+            <button class="button primary" id="process-submit" type="submit"><i data-lucide="play"></i><span>Queue processing</span></button>
+          </form>
+          <section class="process-monitor" aria-labelledby="monitor-title">
+            <div class="section-heading"><h2 id="monitor-title">Activity</h2><span id="process-active-count" class="muted"></span></div>
+            <div id="process-jobs" class="process-jobs"></div>
+            <div id="process-detail" class="process-detail"></div>
+          </section>
+        </div>
+      </section>
+      <section id="textures-view" class="view" aria-labelledby="textures-title" hidden>
+        <div class="page-heading"><div><div class="eyebrow">LOCAL DIFFUSION</div><h1 id="textures-title">Texturing</h1></div><span id="texture-phase" class="local-label" role="status">Connecting</span></div>
+        <div class="texture-toolbar"><button id="texture-start" class="button primary"><i data-lucide="power"></i>Start backend</button><button id="texture-stop" class="button secondary" disabled><i data-lucide="square"></i>Stop backend</button><span id="texture-models" class="muted"></span></div>
+        <p id="texture-error" class="process-error" role="alert" hidden></p>
+        <div class="process-layout">
+          <form id="texture-form" class="process-form">
+            <div class="section-heading"><h2>2D projection</h2><i data-lucide="paintbrush"></i></div>
+            <div class="form-field"><label for="texture-reference">Character reference</label><input id="texture-reference" name="reference" type="file" accept="image/png,image/jpeg,image/webp" required></div>
+            <div class="form-field"><label for="texture-depth">Mesh depth image</label><input id="texture-depth" name="depth" type="file" accept="image/png,image/jpeg,image/webp" required></div>
+            <div class="form-field"><label for="texture-prompt">Appearance</label><textarea id="texture-prompt" name="prompt" rows="5" maxlength="2000" required>Friendly male woodland elf, blue eyes, chestnut hair, small chin beard, bent teal wizard hat, plum scarf, moss green coat, brown leather boots, detailed painted fantasy character</textarea></div>
+            <div class="form-field"><label for="texture-seed">Seed</label><input id="texture-seed" name="seed" type="number" min="0" max="2147483647" step="1" value="42" required></div>
+            <button id="texture-generate" class="button primary" disabled><i data-lucide="sparkles"></i>Generate projection</button>
+          </form>
+          <section class="process-monitor" aria-labelledby="projection-title">
+            <div class="section-heading"><h2 id="projection-title">Projection review</h2><a id="texture-download" class="icon-button" title="Download projection" aria-label="Download projection" hidden><i data-lucide="download"></i></a></div>
+            <select id="texture-history" aria-label="Projection history"><option value="">No projections yet</option></select>
+            <div class="texture-preview"><img id="texture-preview" alt="Generated reference-guided 2D projection" hidden><p id="texture-job-status" role="status">No projection selected</p></div>
+            <details><summary>Backend log</summary><pre id="texture-log" class="process-log" tabindex="0"></pre></details>
+          </section>
+        </div>
+        <section class="texture-handoff" aria-labelledby="texture-handoff-title">
+          <div class="section-heading"><h2 id="texture-handoff-title">StableProjectorz</h2><span class="muted">Desktop editor / manual handoff</span></div>
+          <div class="texture-toolbar"><select id="texture-source" aria-label="Library asset for texturing"><option value="">Choose a library asset</option></select><button id="texture-handoff" class="button secondary" disabled><i data-lucide="package-open"></i>Prepare asset</button><button id="texture-editor" class="button secondary" disabled><i data-lucide="external-link"></i>Open editor</button></div>
+          <div class="texture-address"><label for="texture-url">WebUI address</label><input id="texture-url" readonly placeholder="Backend stopped"><button id="texture-copy" class="icon-button" title="Copy backend address" aria-label="Copy backend address" disabled><i data-lucide="copy"></i></button></div>
+          <output id="texture-handoff-result" class="texture-path"></output>
+        </section>
+      </section>
+      <section id="studio-view" class="view" aria-labelledby="studio-title">
+        <div class="page-heading"><div><div class="eyebrow">IMAGE TO 3D</div><h1 id="studio-title">Studio</h1></div><span class="local-label"><i data-lucide="hard-drive"></i>Local generation</span></div>
+        <div class="studio-layout">
+          <form id="generation-form" class="input-panel">
+            <div class="section-heading"><h2>Generation</h2><span class="section-index">01</span></div>
+            <div class="field-heading"><label for="image-input">Reference image</label><button id="clear-image" type="button" class="icon-button" aria-label="Remove reference image" title="Remove reference image" hidden><i data-lucide="x"></i></button></div>
+            <div id="drop-zone" class="drop-zone">
+              <input id="image-input" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Upload reference image" aria-describedby="image-meta">
+              <img id="reference-preview" alt="Selected reference" hidden>
+              <div id="upload-empty" class="upload-empty"><span class="upload-icon"><i data-lucide="image-plus"></i></span><strong>Reference image</strong><span>PNG, JPG, WEBP</span></div>
+            </div>
+            <div id="image-meta" class="file-meta">No image selected</div>
+            <div class="form-field"><label for="engine-select">Engine</label><select id="engine-select" disabled><option value="">Loading engines...</option></select><p id="engine-note" class="field-note">Checking local engines.</p></div>
+            <div class="settings-row"><div class="form-field"><label for="seed">Seed</label><div class="seed-control"><input id="seed" type="number" min="0" max="2147483647" step="1" value="42" required inputmode="numeric"><button id="random-seed" type="button" class="icon-button" title="Randomize seed" aria-label="Randomize seed"><i data-lucide="shuffle"></i></button></div></div><div class="form-field"><label for="resolution">Resolution</label><select id="resolution" disabled><option value="512">512</option><option value="1024">1024</option></select></div></div>
+            <p id="resolution-warning" class="warning" role="status" hidden><i data-lucide="triangle-alert"></i>1024 requires more VRAM and may run significantly slower or exhaust GPU memory.</p>
+            <div class="form-actions"><button id="generate" class="button primary" type="submit" disabled><i data-lucide="sparkles"></i><span>Generate asset</span><i data-lucide="arrow-up-right"></i></button><button id="cancel-selected" class="button secondary" type="button" disabled><i data-lucide="square"></i>Cancel selected job</button></div>
+          </form>
+          <section class="viewport-panel" aria-labelledby="viewport-title">
+            <header class="viewer-toolbar"><div><h2 id="viewport-title">3D viewport</h2><span id="model-label">No asset selected</span></div><div class="viewer-tools"><button id="rotate-model" class="icon-button" aria-label="Auto rotate model" title="Auto rotate model" aria-pressed="false" disabled><i data-lucide="rotate-3d"></i></button><button id="reset-camera" class="icon-button" aria-label="Reset camera" title="Reset camera" disabled><i data-lucide="scan"></i></button><button id="fullscreen" class="icon-button" aria-label="Toggle viewport fullscreen" title="Toggle viewport fullscreen"><i data-lucide="maximize"></i></button></div></header>
+            <div id="viewer-surface" class="viewer-surface">
+              <model-viewer id="model-viewer" alt="3D asset preview" camera-controls touch-action="pan-y" reveal="auto" loading="eager" shadow-intensity="1" environment-image="neutral" camera-orbit="35deg 70deg auto" hidden></model-viewer>
+              <div id="viewer-empty" class="viewer-empty"><div class="empty-wire"><i data-lucide="box"></i></div><h3 id="viewer-empty-title">Ready when you are</h3><p id="viewer-empty-copy">No generated asset yet.</p></div>
+              <div id="model-status" class="model-status" role="status" hidden>Loading 3D asset...</div>
+              <span class="axis-label" aria-hidden="true"><b>Y</b><span>&#9492;</span><b>X</b><em>Z</em></span>
+            </div>
+            <footer class="viewer-footer"><span id="viewer-detail">GLB <span class="separator">/</span> Waiting for output</span><a id="download-model" class="button download-button" download hidden><i data-lucide="download"></i>Download GLB</a></footer>
+          </section>
+          <section class="queue-panel" aria-labelledby="queue-title">
+            <div class="section-heading"><div class="heading-with-count"><h2 id="queue-title">Job queue</h2><span id="queue-count" class="count">0</span></div><span id="queue-summary" class="muted">No active jobs</span></div>
+            <div class="queue-layout"><div id="job-list" class="job-list"><div class="empty-list"><i data-lucide="list-ordered"></i><span>No generation jobs yet</span></div></div><div class="log-panel"><div class="log-heading"><span id="log-title">JOB LOG</span><span id="job-stage">Idle</span></div><div id="job-progress" class="job-progress" role="progressbar" aria-label="Generation progress" aria-valuetext="Waiting" hidden><span></span></div><pre id="job-log" tabindex="0" aria-label="Selected job log">Waiting for a job.</pre></div></div>
+          </section>
+        </div>
+      </section>
+      <section id="library-view" class="view" aria-labelledby="library-title" hidden>
+        <div class="page-heading"><div><div class="eyebrow">GENERATED ASSETS</div><h1 id="library-title">Library</h1></div><label class="search-field"><i data-lucide="search"></i><input id="library-search" type="search" placeholder="Search assets" aria-label="Search assets by engine, job ID, or seed"></label></div>
+        <div class="library-bar"><span id="asset-summary">0 assets</span><label>Sort<select id="library-sort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></label></div>
+        <div id="asset-library" class="asset-library"></div>
+      </section>
+      <section id="engines-view" class="view" aria-labelledby="engines-title" hidden>
+        <div class="page-heading"><div><div class="eyebrow">LOCAL RUNTIMES</div><h1 id="engines-title">Engines</h1></div><span id="engines-summary" class="local-label">Checking availability</span></div>
+        <div id="engine-list" class="engine-list"></div>
+      </section>
+    </main>
+    <footer class="app-footer"><span>BroogForge</span><span id="last-sync">Awaiting first sync</span></footer>
+  </div>
+  <dialog id="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-copy"><form method="dialog"><div class="dialog-icon"><i data-lucide="triangle-alert"></i></div><h2 id="confirm-title">Confirm action</h2><p id="confirm-copy"></p><div class="dialog-actions"><button class="button secondary" value="cancel" autofocus>Keep working</button><button id="confirm-action" class="button danger" value="confirm">Confirm</button></div></form></dialog>
+</body>
+</html>

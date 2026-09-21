@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#e9eae6"><meta name="description" content="FLUX. A kinetic object by BroogDesign.">
+  <title>FLUX / BroogDesign</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./dist/main.js"></script>
+</head>
+<body>
+  <a class="skip" href="#collection">Skip to collection</a>
+  <header class="header"><a class="brand" href="#top" aria-label="BroogDesign home">broog<span class="brand-cross">+</span><small>DESIGN / OBJECTS</small></a><nav aria-label="Main"><a href="#collection" class="text-link">Collection <span>03</span></a><button id="open-settings" class="icon-button" aria-label="Open effects settings" title="Effects settings"><i data-lucide="sliders-horizontal"></i></button><a href="../#studio" class="icon-button" title="Back to BroogForge" aria-label="Back to BroogForge"><i data-lucide="grid-2x2"></i></a></nav></header>
+  <main>
+    <section class="journey" id="top" aria-label="FLUX kinetic sculpture">
+      <div class="stage">
+        <div id="scene" class="scene" role="img" aria-label="Interactive metallic ribbon sculpture"><img class="poster" src="./assets/silver.webp" alt="Silver kinetic sculpture" fetchpriority="high"></div>
+        <div class="hero-type"><div class="eyebrow"><span class="index">001</span> OBJECTS, NOT ORDINARY.</div><h1 aria-label="FLUX"><span>F</span><span>L</span><span>U</span><span>X</span><sup>01</sup></h1><p id="chapter-copy">One object.<br>Endless possibilities.</p></div>
+        <div class="object-note"><span class="micro">BROOG / EXPERIMENT 01</span><span id="object-state">THE CLOSED FORM</span></div>
+        <div class="finish-panel"><span class="micro">FINISH</span><div class="swatches" role="group" aria-label="Material finish"><button class="swatch silver" data-finish="silver" title="Polished silver" aria-label="Polished silver" aria-pressed="true"></button><button class="swatch carbon" data-finish="carbon" title="Carbon black" aria-label="Carbon black" aria-pressed="false"></button><button class="swatch ion" data-finish="ion" title="Ion blue" aria-label="Ion blue" aria-pressed="false"></button></div><span id="finish-name">Polished silver</span></div>
+        <div class="stage-bottom"><button id="unfold" class="round-command magnetic" title="Unfold sculpture"><span><i data-lucide="move-up-right"></i></span><b>UNFOLD</b></button><div class="chapter-nav" role="group" aria-label="Sculpture chapter"><button data-chapter="0" aria-pressed="true"><span>01</span> Form</button><button data-chapter="1" aria-pressed="false"><span>02</span> Field</button><button data-chapter="2" aria-pressed="false"><span>03</span> Flow</button></div><button id="pause" class="icon-button" title="Pause motion" aria-label="Pause motion" aria-pressed="false"><i data-lucide="pause"></i></button></div>
+        <div class="progress-track" aria-hidden="true"><span id="progress"></span></div>
+        <p id="scene-status" class="scene-status" role="status" hidden></p>
+      </div>
+    </section>
+    <section id="collection" class="collection">
+      <header class="collection-heading"><div class="eyebrow">MATERIAL MATTERS / 01&mdash;03</div><h2>Different by nature.</h2><span class="collection-caption">Three expressions. One FLUX.</span></header>
+      <div class="studies">
+        <button class="study" data-study="silver"><div class="study-image"><img src="./assets/silver.webp" alt="Polished silver FLUX sculpture" loading="lazy"><span class="study-number">01 / Ag</span><span class="study-arrow"><i data-lucide="arrow-up-right"></i></span></div><div class="study-meta"><h3>Silver lining</h3><span>POLISHED / PRECISE</span></div></button>
+        <button class="study" data-study="carbon"><div class="study-image"><img src="./assets/carbon.webp" alt="Carbon black FLUX sculpture" loading="lazy"><span class="study-number">02 / C</span><span class="study-arrow"><i data-lucide="arrow-up-right"></i></span></div><div class="study-meta"><h3>After hours</h3><span>DARK / DELIBERATE</span></div></button>
+        <button class="study" data-study="ion"><div class="study-image"><img src="./assets/ion.webp" alt="Blue metallic FLUX sculpture" loading="lazy"><span class="study-number">03 / Co</span><span class="study-arrow"><i data-lucide="arrow-up-right"></i></span></div><div class="study-meta"><h3>Electric instinct</h3><span>CHARGED / UNEXPECTED</span></div></button>
+      </div>
+    </section>
+  </main>
+  <footer><a class="footer-word" href="#top">Stay curious.<i data-lucide="arrow-up-right"></i></a><div class="footer-meta"><span>AN EXPERIMENT BY BROOGDESIGN</span><a href="../#studio">Back to the forge</a><span>GOTHENBURG, SE / 2026</span></div></footer>
+  <dialog id="settings" aria-labelledby="settings-title"><form method="dialog"><header><div><span class="micro">BROOGFORGE</span><h2 id="settings-title">Effects Studio</h2></div><button class="icon-button" aria-label="Close settings" title="Close"><i data-lucide="x"></i></button></header></form><div class="settings-body"><label for="intensity">Interaction <output id="intensity-value">65%</output></label><input id="intensity" type="range" min="0" max="100" value="65"><label for="speed">Motion speed <output id="speed-value">35%</output></label><input id="speed" type="range" min="0" max="100" value="35"><label for="quality">Rendering</label><select id="quality"><option value="auto">Adaptive</option><option value="eco">Battery saver</option><option value="high">High detail</option></select><label class="switch-row" for="still">Still mode<input type="checkbox" id="still" role="switch"></label><div class="settings-actions"><button id="reset" class="text-button"><i data-lucide="rotate-ccw"></i>Reset</button><button id="export" class="text-button"><i data-lucide="download"></i>Export preset</button></div><output id="settings-status" role="status"></output><div class="engines"><span>THREE.JS</span><span>MOTION</span><span>ANIME.JS</span></div></div></dialog>
+</body></html>

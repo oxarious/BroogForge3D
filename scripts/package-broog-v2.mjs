@@ -1,0 +1,14 @@
+import fs from 'node:fs/promises';
+import { NodeIO } from '@gltf-transform/core';
+import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
+import { dedup, prune, weld, resample, quantize, textureCompress } from '@gltf-transform/functions';
+import sharp from 'sharp';
+const root = 'C:/OG-Business/Clinic-pro/broog-character/web-ready-v2';
+const io = new NodeIO().registerExtensions(ALL_EXTENSIONS).setAllowNetwork(false);
+const document = await io.read(`${root}/broog-rig-review.glb`);
+await document.transform(dedup(), prune({ keepLeaves: true }), weld(), resample(), quantize(), textureCompress({ encoder: sharp, targetFormat: 'webp', resize: [2048, 2048], quality: 92 }));
+if (!document.getRoot().listNodes().some(node => node.getName() === 'SeatAnchor')) throw new Error('Seat anchor was lost');
+const binary = await io.writeBinary(document);
+await fs.writeFile(`${root}/broog-web-review.glb`, binary);
+await fs.writeFile(`${root}/web-asset-report.json`, JSON.stringify({ status: 'review, not approved for publication', bytes: binary.length, animations: document.getRoot().listAnimations().map(clip => clip.getName()), triangles: document.getRoot().listMeshes().reduce((sum, mesh) => sum + mesh.listPrimitives().reduce((n, primitive) => n + primitive.getIndices().getCount()/3, 0), 0), textures: document.getRoot().listTextures().length, extensions: document.getRoot().listExtensionsUsed().map(extension => extension.extensionName) }, null, 2));
+console.log(`Packaged ${binary.length} bytes with seat anchor and all clips.`);

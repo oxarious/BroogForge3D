@@ -1,0 +1,12 @@
+import { execFileSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const result = execFileSync(path.join(root, 'runtime/forge-env/Scripts/python.exe'), ['-c', "import torch, clip, gradio, transformers; import json; assert torch.cuda.is_available(); x=torch.ones(4,device='cuda'); assert (x*x).sum().item()==4; print(json.dumps({'torch':torch.__version__,'gpu':torch.cuda.get_device_name(),'cuda':torch.version.cuda}))"], { encoding: 'utf8', windowsHide: true, timeout: 120000 });
+const runtime = JSON.parse(result.trim().split('\n').at(-1));
+const forgeRevision = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: path.join(root, 'vendor/Forge'), encoding: 'utf8', windowsHide: true }).trim();
+const record = { verifiedAt: new Date().toISOString(), ...runtime, forgeRevision };
+fs.writeFileSync(path.join(root, 'runtime/forge-ready.json'), JSON.stringify(record, null, 2));
+fs.writeFileSync(path.join(root, 'runtime/forge-requirements.lock.txt'), execFileSync(path.join(root, 'runtime/forge-env/Scripts/python.exe'), ['-m', 'pip', 'freeze'], { encoding: 'utf8', windowsHide: true }));
+console.log(record);
